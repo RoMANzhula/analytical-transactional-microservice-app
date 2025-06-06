@@ -1,13 +1,12 @@
 package org.romanzhula.user_service.controllers;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.romanzhula.user_service.dto.UserRequest;
 import org.romanzhula.user_service.dto.UserResponse;
 import org.romanzhula.user_service.services.UserService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 
 @RestController
@@ -23,6 +22,13 @@ public class UserController {
             @PathVariable Long id
     ) {
         return ResponseEntity.ok(userService.getUserById(id));
+    }
+
+    @PostMapping("/create")
+    public ResponseEntity<UserResponse> createUser(
+            @RequestBody @Valid UserRequest userRequest
+    ) {
+        return ResponseEntity.ok(userService.saveNewUser(userRequest));
     }
 
 }
