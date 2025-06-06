@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+
 @Entity
 @Data
 @NoArgsConstructor
@@ -21,6 +22,7 @@ public class User {
 
     private String name;
 
+    @Column(unique = true)
     private String email;
 
 }
