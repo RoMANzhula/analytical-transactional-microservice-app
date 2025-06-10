@@ -17,6 +17,20 @@ spring:
         format_sql: true
         dialect: org.hibernate.dialect.PostgreSQLDialect
 
+  rabbitmq:
+    host: rabbitmq
+    port: 5672
+    username: guest
+    password: guest
+    exchange:
+      name: user-exchange
+      type: topic
+    queue:
+      name:
+        user-info: user-queue
+    routing-key:
+      user-info: user.routing.key
+
 server:
   port: 8081
   error:
