@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.romanzhula.user_service.dto.UserRequest;
 import org.romanzhula.user_service.dto.UserResponse;
+import org.romanzhula.user_service.dto.events.UserInfoMessage;
 import org.romanzhula.user_service.models.User;
 import org.romanzhula.user_service.repositories.UserRepository;
 import org.romanzhula.user_service.services.UserService;
@@ -44,6 +45,40 @@ public class UserServiceImpl implements UserService {
         userRepository.save(savedUser);
 
         return modelMapper.map(savedUser, UserResponse.class);
+    }
+
+    @Override
+    @Transactional
+    public void saveOrUpdateUser(UserInfoMessage userInfoMessage) {
+        User user = userRepository.findByGoogleId(userInfoMessage.googleId())
+                .orElseGet(() -> userRepository.findByGithubId(userInfoMessage.githubId()).orElse(null))
+        ;
+
+        if (user == null) {
+
+            user = User.builder()
+                    .name(userInfoMessage.name())
+                    .email(userInfoMessage.email())
+                    .googleId(userInfoMessage.googleId())
+                    .githubId(userInfoMessage.githubId())
+                    .build();
+        } else {
+            // If user exists - update it data
+            user.setName(userInfoMessage.name());
+            user.setEmail(userInfoMessage.email());
+
+            // Update Google ID if it is missing
+            if (userInfoMessage.googleId() != null && user.getGoogleId() == null) {
+                user.setGoogleId(userInfoMessage.googleId());
+            }
+
+            // Update GitHub ID if it is missing
+            if (userInfoMessage.githubId() != null && user.getGithubId() == null) {
+                user.setGithubId(userInfoMessage.githubId());
+            }
+        }
+
+        userRepository.save(user);
     }
 
 }
