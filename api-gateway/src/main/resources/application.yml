@@ -27,6 +27,14 @@ spring:
     port: 5672
     username: guest
     password: guest
+    exchange:
+      name: user-exchange
+      type: topic
+    queue:
+      name:
+        user-info: user-queue
+    routing-key:
+      user-info: user.routing.key
 
   security:
     oauth2:
