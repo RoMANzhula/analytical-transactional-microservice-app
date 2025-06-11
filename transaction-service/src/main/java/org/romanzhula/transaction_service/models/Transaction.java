@@ -38,4 +38,9 @@ public class Transaction {
     private String googleId;
     private String githubId;
 
+    @PrePersist
+    protected void onCreate() {
+        createdAt = LocalDateTime.now();
+    }
+
 }
