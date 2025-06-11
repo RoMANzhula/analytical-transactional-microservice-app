@@ -1,0 +1,52 @@
+spring:
+  application:
+    name: transaction-service
+
+  datasource:
+    url: jdbc:postgresql://postgres:5432/atma_transaction_db
+    username: postgres
+    password: password
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+  rabbitmq:
+    host: rabbitmq
+    port: 5672
+    username: guest
+    password: guest
+    exchange:
+      analytics:
+        name: analytics-exchange
+        type: topic
+      notification:
+        name: notification-exchange
+        type: topic
+    queue:
+      analytics: analytics-queue
+      notification: notification-queue
+    routing-key:
+      analytics: analytics.routing.key
+      notification: notification.routing.key
+
+server:
+  port: 8082
+  error:
+    include-message: always
+    include-binding-errors: always
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+
+logging:
+  level:
+    root: INFO
