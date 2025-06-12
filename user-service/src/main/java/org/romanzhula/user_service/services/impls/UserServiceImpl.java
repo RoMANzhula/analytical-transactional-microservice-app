@@ -3,12 +3,14 @@ package org.romanzhula.user_service.services.impls;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.romanzhula.user_service.dto.SetPassphraseRequest;
 import org.romanzhula.user_service.dto.UserRequest;
 import org.romanzhula.user_service.dto.UserResponse;
 import org.romanzhula.user_service.dto.events.UserInfoMessage;
 import org.romanzhula.user_service.models.User;
 import org.romanzhula.user_service.repositories.UserRepository;
 import org.romanzhula.user_service.services.UserService;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -77,6 +79,26 @@ public class UserServiceImpl implements UserService {
                 user.setGithubId(userInfoMessage.githubId());
             }
         }
+
+        userRepository.save(user);
+    }
+
+    @Override
+    @Transactional
+    public void setPassphrase(SetPassphraseRequest request) {
+        String googleId = request.getGoogleId();
+        String githubId = request.getGithubId();
+
+        User user = userRepository
+                .findByGoogleId(googleId)
+                .orElseGet(() -> userRepository.findByGithubId(githubId)
+                        .orElseThrow(() -> new EntityNotFoundException("User not found!"))
+                )
+        ;
+
+        String passphraseHash = BCrypt.hashpw(request.getPassphrase(), BCrypt.gensalt());
+
+        user.setPassphraseHash(passphraseHash);
 
         userRepository.save(user);
     }
