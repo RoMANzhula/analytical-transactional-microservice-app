@@ -24,22 +24,34 @@ public class OAuth2SuccessHandler implements ServerAuthenticationSuccessHandler 
     ) {
 
         if (authentication instanceof OAuth2AuthenticationToken token) {
+            var userInfo = token.getPrincipal().getAttributes();
+            String googleId = (String) userInfo.get("sub");
+            String githubId = null;
+
+            if ("github".equals(token.getAuthorizedClientRegistrationId())) {
+                githubId = userInfo.get("id").toString();
+            }
+
             userInfoService.processUserInfo(token);
+
+            // redirect user to set-passphrase page
+            ServerHttpResponse response = webFilterExchange.getExchange().getResponse();
+            response.setStatusCode(HttpStatus.FOUND); // redirect 302
+
+            String redirectUrl = UriComponentsBuilder
+                    .fromUriString("http://localhost:3000/set-passphrase")
+                    .queryParam("googleId", googleId)
+                    .queryParam("githubId", githubId)
+                    .build()
+                    .toUriString()
+            ;
+
+            response.getHeaders().setLocation(java.net.URI.create(redirectUrl));
+
+            return response.setComplete();
         }
 
-        // redirect user to set-passphrase page
-        ServerHttpResponse response = webFilterExchange.getExchange().getResponse();
-        response.setStatusCode(HttpStatus.FOUND); // redirect 302
-
-        String redirectUrl = UriComponentsBuilder
-                .fromUriString("http://localhost:8081/api/v1/users/set-passphrase")
-                .build()
-                .toUriString()
-        ;
-
-        response.getHeaders().setLocation(java.net.URI.create(redirectUrl));
-
-        return response.setComplete();
+        return Mono.error(new RuntimeException("Invalid authentication token."));
     }
 
 }
