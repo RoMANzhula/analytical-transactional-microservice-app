@@ -2,10 +2,13 @@ package org.romanzhula.api_gateway.handlers;
 
 import lombok.RequiredArgsConstructor;
 import org.romanzhula.api_gateway.services.UserInfoService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.web.server.WebFilterExchange;
 import org.springframework.security.web.server.authentication.ServerAuthenticationSuccessHandler;
+import org.springframework.web.util.UriComponentsBuilder;
 import reactor.core.publisher.Mono;
 
 
@@ -24,12 +27,19 @@ public class OAuth2SuccessHandler implements ServerAuthenticationSuccessHandler 
             userInfoService.processUserInfo(token);
         }
 
-        // redirect user to home page (or another URL)
-        return webFilterExchange
-                .getExchange()
-                .getResponse()
-                .setComplete()
+        // redirect user to set-passphrase page
+        ServerHttpResponse response = webFilterExchange.getExchange().getResponse();
+        response.setStatusCode(HttpStatus.FOUND); // redirect 302
+
+        String redirectUrl = UriComponentsBuilder
+                .fromUriString("http://localhost:8081/api/v1/users/set-passphrase")
+                .build()
+                .toUriString()
         ;
+
+        response.getHeaders().setLocation(java.net.URI.create(redirectUrl));
+
+        return response.setComplete();
     }
 
 }
