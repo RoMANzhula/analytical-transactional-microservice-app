@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.romanzhula.user_service.dto.SetPassphraseRequest;
 import org.romanzhula.user_service.dto.UserRequest;
 import org.romanzhula.user_service.dto.UserResponse;
+import org.romanzhula.user_service.dto.VerifyPassphraseRequest;
 import org.romanzhula.user_service.services.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -41,6 +42,14 @@ public class UserController {
         userService.setPassphrase(request);
 
         return ResponseEntity.ok("Passphrase set successfully!");
+    }
+
+    // for create transactions user must input a passphrase
+    @GetMapping("/verify-passphrase")
+    public ResponseEntity<Boolean> verifyPassphrase(
+            @RequestBody @Valid VerifyPassphraseRequest request
+    ) {
+        return ResponseEntity.ok(userService.verifyPassphrase(request));
     }
 
 }
