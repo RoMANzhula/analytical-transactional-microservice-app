@@ -6,6 +6,7 @@ import org.modelmapper.ModelMapper;
 import org.romanzhula.user_service.dto.SetPassphraseRequest;
 import org.romanzhula.user_service.dto.UserRequest;
 import org.romanzhula.user_service.dto.UserResponse;
+import org.romanzhula.user_service.dto.VerifyPassphraseRequest;
 import org.romanzhula.user_service.dto.events.UserInfoMessage;
 import org.romanzhula.user_service.models.User;
 import org.romanzhula.user_service.repositories.UserRepository;
@@ -101,6 +102,19 @@ public class UserServiceImpl implements UserService {
         user.setPassphraseHash(passphraseHash);
 
         userRepository.save(user);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Boolean verifyPassphrase(VerifyPassphraseRequest request) {
+        Long userId = request.getUserId();
+
+        User user = userRepository
+                .findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User not found!"))
+        ;
+
+        return BCrypt.checkpw(request.getPassphrase(), user.getPassphraseHash());
     }
 
 }

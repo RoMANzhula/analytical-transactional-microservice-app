@@ -1,6 +1,5 @@
 package org.romanzhula.user_service.services;
 
-import jakarta.validation.Valid;
 import org.romanzhula.user_service.dto.SetPassphraseRequest;
 import org.romanzhula.user_service.dto.UserRequest;
 import org.romanzhula.user_service.dto.UserResponse;
