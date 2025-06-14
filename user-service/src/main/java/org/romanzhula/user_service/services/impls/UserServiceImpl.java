@@ -117,4 +117,22 @@ public class UserServiceImpl implements UserService {
         return BCrypt.checkpw(request.getPassphrase(), user.getPassphraseHash());
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public Long getUserIdByGoogleId(String googleId) {
+        return userRepository.findByGoogleId(googleId)
+                .map(User::getId)
+                .orElseThrow(() -> new EntityNotFoundException("User not found for googleId: " + googleId))
+        ;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Long getUserIdByGithubId(String githubId) {
+        return userRepository.findByGithubId(githubId)
+                .map(User::getId)
+                .orElseThrow(() -> new EntityNotFoundException("User not found for githubId: " + githubId))
+        ;
+    }
+
 }
