@@ -45,11 +45,33 @@ public class UserController {
     }
 
     // for create transactions user must input a passphrase
-    @GetMapping("/verify-passphrase")
+    @PostMapping("/verify-passphrase")
     public ResponseEntity<Boolean> verifyPassphrase(
             @RequestBody @Valid VerifyPassphraseRequest request
     ) {
         return ResponseEntity.ok(userService.verifyPassphrase(request));
+    }
+
+    @GetMapping("/id/google")
+    public ResponseEntity<Long> getUserIdByGoogleId(
+            @RequestHeader("X-Google-Id") String googleId
+    ) {
+        Long userId = userService.getUserIdByGoogleId(googleId);
+        if (userId == null) {
+            return ResponseEntity.status(404).body(null);
+        }
+        return ResponseEntity.ok(userId);
+    }
+
+    @GetMapping("/id/github")
+    public ResponseEntity<Long> getUserIdByGithubId(
+            @RequestHeader("X-Github-Id") String githubId
+    ) {
+        Long userId = userService.getUserIdByGithubId(githubId);
+        if (userId == null) {
+            return ResponseEntity.status(404).body(null);
+        }
+        return ResponseEntity.ok(userId);
     }
 
 }
