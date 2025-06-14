@@ -17,4 +17,7 @@ public interface UserService {
 
     Boolean verifyPassphrase(VerifyPassphraseRequest request);
 
+    Long getUserIdByGoogleId(String googleId);
+    Long getUserIdByGithubId(String githubId);
+
 }
