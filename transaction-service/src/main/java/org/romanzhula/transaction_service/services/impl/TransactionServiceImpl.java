@@ -6,7 +6,7 @@ import org.romanzhula.transaction_service.configurations.UserServiceClient;
 import org.romanzhula.transaction_service.dto.TransactionRequest;
 import org.romanzhula.transaction_service.dto.TransactionResponse;
 import org.romanzhula.transaction_service.models.Transaction;
-import org.romanzhula.transaction_service.repositories.TransactionalRepositury;
+import org.romanzhula.transaction_service.repositories.TransactionRepository;
 import org.romanzhula.transaction_service.services.TransactionService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -18,7 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class TransactionServiceImpl implements TransactionService {
 
     private final UserServiceClient userServiceClient;
-    private final TransactionalRepositury transactionalRepositury;
+    private final TransactionRepository transactionRepository;
 
 
     @Override
@@ -50,7 +50,7 @@ public class TransactionServiceImpl implements TransactionService {
                 .build()
         ;
 
-        transactionalRepositury.save(transaction);
+        transactionRepository.save(transaction);
 
         return ResponseEntity.ok(
                 TransactionResponse.builder()
