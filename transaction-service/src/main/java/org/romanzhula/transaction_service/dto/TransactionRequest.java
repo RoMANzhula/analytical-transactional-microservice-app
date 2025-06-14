@@ -23,4 +23,10 @@ public class TransactionRequest {
     @NotNull
     private String currency;
 
+    @NotNull
+    private String passphrase;
+
+    private String googleId;
+    private String githubId;
+
 }
