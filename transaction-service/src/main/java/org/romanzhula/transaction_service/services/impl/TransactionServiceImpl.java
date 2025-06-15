@@ -5,9 +5,12 @@ import lombok.RequiredArgsConstructor;
 import org.romanzhula.transaction_service.configurations.UserServiceClient;
 import org.romanzhula.transaction_service.dto.TransactionRequest;
 import org.romanzhula.transaction_service.dto.TransactionResponse;
+import org.romanzhula.transaction_service.dto.events.NotificationRequestDTO;
 import org.romanzhula.transaction_service.models.Transaction;
 import org.romanzhula.transaction_service.repositories.TransactionRepository;
 import org.romanzhula.transaction_service.services.TransactionService;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,8 +20,16 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class TransactionServiceImpl implements TransactionService {
 
+    @Value("${spring.rabbitmq.exchange.notification.name}")
+    private String notificationExchange;
+
+    @Value("${spring.rabbitmq.routing-key.notification}")
+    private String notificationRoutingKey;
+
+
     private final UserServiceClient userServiceClient;
     private final TransactionRepository transactionRepository;
+    private final RabbitTemplate rabbitTemplate;
 
 
     @Override
@@ -51,6 +62,22 @@ public class TransactionServiceImpl implements TransactionService {
         ;
 
         transactionRepository.save(transaction);
+
+
+        NotificationRequestDTO notificationRequestDTO = NotificationRequestDTO.builder()
+                .userId(String.valueOf(transaction.getUserId()))
+                .message("Your transaction amount is: " + transaction.getAmount() +
+                        " " + transaction.getCurrency() + " done successfully!"
+                )
+                .build()
+        ;
+
+        rabbitTemplate.convertAndSend(
+                notificationExchange,
+                notificationRoutingKey,
+                notificationRequestDTO
+        );
+
 
         return ResponseEntity.ok(
                 TransactionResponse.builder()
