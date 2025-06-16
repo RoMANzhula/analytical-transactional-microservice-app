@@ -6,10 +6,7 @@ import org.romanzhula.notification_service.dto.NotificationResponse;
 import org.romanzhula.notification_service.services.NotificationService;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 
 @RestController
@@ -26,6 +23,17 @@ public class NotificationController {
             @RequestParam(defaultValue = "10") int size
     ) {
         Page<NotificationResponse> notificationsPage = notificationService.getAllNotifications(page, size);
+
+        return ResponseEntity.ok(notificationsPage);
+    }
+
+    @GetMapping("/user/{user-id")
+    public ResponseEntity<Page<NotificationResponse>> getNotificationsByUserId(
+            @PathVariable(name = "user-id") String userId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        Page<NotificationResponse> notificationsPage = notificationService.getNotificationsByUserId(userId, page, size);
 
         return ResponseEntity.ok(notificationsPage);
     }
