@@ -15,6 +15,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 
 @Service
 @RequiredArgsConstructor
@@ -30,6 +33,9 @@ public class TransactionServiceImpl implements TransactionService {
     private final UserServiceClient userServiceClient;
     private final TransactionRepository transactionRepository;
     private final RabbitTemplate rabbitTemplate;
+
+    // Virtual Threads Executor for rabbitmq messages
+    private final ExecutorService executorService = Executors.newVirtualThreadPerTaskExecutor();
 
 
     @Override
@@ -72,11 +78,13 @@ public class TransactionServiceImpl implements TransactionService {
                 .build()
         ;
 
-        rabbitTemplate.convertAndSend(
-                notificationExchange,
-                notificationRoutingKey,
-                notificationRequestDTO
-        );
+        executorService.submit(() -> {
+            rabbitTemplate.convertAndSend(
+                    notificationExchange,
+                    notificationRoutingKey,
+                    notificationRequestDTO
+            );
+        });
 
 
         return ResponseEntity.ok(
