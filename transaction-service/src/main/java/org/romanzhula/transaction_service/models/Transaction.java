@@ -32,7 +32,7 @@ public class Transaction {
     private String currency;
 
     @Column(nullable = false)
-    private LocalDateTime createdAt = LocalDateTime.now();
+    private LocalDateTime createdAt;
 
     // optional (during testing)
     private String googleId;
