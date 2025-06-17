@@ -6,12 +6,17 @@ import org.springframework.security.oauth2.client.authentication.OAuth2Authentic
 import org.springframework.stereotype.Service;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 
 @Service
 @RequiredArgsConstructor
 public class UserInfoService {
 
     private final RabbitTemplate rabbitTemplate;
+
+    private final ExecutorService executorService = Executors.newVirtualThreadPerTaskExecutor();
 
 
     public void processUserInfo(OAuth2AuthenticationToken token) {
@@ -32,7 +37,13 @@ public class UserInfoService {
 
         UserInfoMessage userInfoMessage = new UserInfoMessage(name, email, googleId, githubId);
 
-        rabbitTemplate.convertAndSend("user-exchange", "user.routing.key", userInfoMessage);
+        executorService.submit(() -> {
+            rabbitTemplate.convertAndSend(
+                    "user-exchange",
+                    "user.routing.key",
+                    userInfoMessage
+            );
+        });
     }
 
 }
