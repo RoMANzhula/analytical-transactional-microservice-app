@@ -1,0 +1,42 @@
+spring:
+  application:
+    name: analytics-service
+
+  datasource:
+    url: jdbc:clickhouse://clickhouse:8123/default
+    username: default
+    password:
+    driver-class-name: com.clickhouse.jdbc.ClickHouseDriver
+
+  rabbitmq:
+    host: rabbitmq
+    port: 5672
+    username: guest
+    password: guest
+    exchange:
+      analytics:
+        name: analytics-exchange
+    queue:
+      analytics: analytics-queue
+    routing-key:
+      analytics: analytics.routing.key
+
+  cloud:
+    stream:
+      bindings:
+        input:
+          destination: analytics-exchange
+          group: analytics-group
+
+
+server:
+  port: 8083
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://eureka-server:8761/eureka/
+
+logging:
+  level:
+    root: INFO
