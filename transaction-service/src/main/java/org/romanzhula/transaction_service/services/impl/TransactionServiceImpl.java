@@ -6,6 +6,7 @@ import org.romanzhula.transaction_service.configurations.UserServiceClient;
 import org.romanzhula.transaction_service.dto.TransactionRequest;
 import org.romanzhula.transaction_service.dto.TransactionResponse;
 import org.romanzhula.transaction_service.dto.events.NotificationRequestDTO;
+import org.romanzhula.transaction_service.dto.events.TransactionEventDto;
 import org.romanzhula.transaction_service.models.Transaction;
 import org.romanzhula.transaction_service.repositories.TransactionRepository;
 import org.romanzhula.transaction_service.services.TransactionService;
@@ -28,6 +29,12 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Value("${spring.rabbitmq.routing-key.notification}")
     private String notificationRoutingKey;
+
+    @Value("${spring.rabbitmq.exchange.analytics.name}")
+    private String analyticsExchange;
+
+    @Value("${spring.rabbitmq.routing-key.analytics}")
+    private String analyticsRoutingKey;
 
 
     private final UserServiceClient userServiceClient;
@@ -83,6 +90,21 @@ public class TransactionServiceImpl implements TransactionService {
                     notificationExchange,
                     notificationRoutingKey,
                     notificationRequestDTO
+            );
+        });
+
+
+        TransactionEventDto transactionEventDto = TransactionEventDto.builder()
+                .userId(String.valueOf(transaction.getUserId()))
+                .eventType("transaction")
+                .eventTime(transaction.getCreatedAt())
+                .build();
+
+        executorService.submit(() -> {
+            rabbitTemplate.convertAndSend(
+                    analyticsExchange,
+                    analyticsRoutingKey,
+                    transactionEventDto
             );
         });
 
