@@ -24,10 +24,24 @@ public class RabbitMQConfig {
     @Value("${spring.rabbitmq.routing-key.notification}")
     private String notificationRoutingKey;
 
+    @Value("${spring.rabbitmq.exchange.analytics.name}")
+    private String analyticsExchangeName;
+
+    @Value("${spring.rabbitmq.queue.analytics}")
+    private String analyticsQueueName;
+
+    @Value("${spring.rabbitmq.routing-key.analytics}")
+    private String analyticsRoutingKey;
+
 
     @Bean
     public TopicExchange notificationExchange() {
         return new TopicExchange(notificationExchangeName);
+    }
+
+    @Bean
+    public TopicExchange analyticsExchange() {
+        return new TopicExchange(analyticsExchangeName);
     }
 
     @Bean
@@ -36,11 +50,25 @@ public class RabbitMQConfig {
     }
 
     @Bean
+    public Queue transactionQueue() {
+        return new Queue(analyticsQueueName, true);
+    }
+
+    @Bean
     public Binding notificationBinding(Queue notificationQueue, TopicExchange notificationExchange) {
         return BindingBuilder
                 .bind(notificationQueue)
                 .to(notificationExchange)
                 .with(notificationRoutingKey)
+        ;
+    }
+
+    @Bean
+    public Binding transactionBinding(Queue transactionQueue, TopicExchange analyticsExchange) {
+        return BindingBuilder
+                .bind(transactionQueue)
+                .to(analyticsExchange)
+                .with(analyticsRoutingKey)
         ;
     }
 
