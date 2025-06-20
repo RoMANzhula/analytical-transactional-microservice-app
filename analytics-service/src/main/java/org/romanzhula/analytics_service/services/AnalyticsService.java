@@ -9,4 +9,6 @@ public interface AnalyticsService {
 
     List<AnalyticsResponseDto> getAllAnalyticsRecords(int page, int size);
 
+    List<AnalyticsResponseDto> getAllAnalyticsRecordsByUserId(String userId, int page, int size);
+
 }
