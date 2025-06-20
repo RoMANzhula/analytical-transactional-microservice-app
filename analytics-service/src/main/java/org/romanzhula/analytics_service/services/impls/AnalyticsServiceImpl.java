@@ -21,4 +21,9 @@ public class AnalyticsServiceImpl implements AnalyticsService {
         return analyticsRepository.findAll(page, size);
     }
 
+    @Override
+    public List<AnalyticsResponseDto> getAllAnalyticsRecordsByUserId(String userId, int page, int size) {
+        return analyticsRepository.findAllByUserId(userId, page, size);
+    }
+
 }
