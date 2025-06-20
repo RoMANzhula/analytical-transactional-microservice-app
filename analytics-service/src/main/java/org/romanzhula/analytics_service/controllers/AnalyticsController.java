@@ -4,10 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.romanzhula.analytics_service.dto.AnalyticsResponseDto;
 import org.romanzhula.analytics_service.services.AnalyticsService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -26,6 +23,15 @@ public class AnalyticsController {
             @RequestParam(defaultValue = "10") int size
     ) {
         return ResponseEntity.ok(analyticsService.getAllAnalyticsRecords(page, size));
+    }
+
+    @GetMapping("/{user-id}")
+    public ResponseEntity<List<AnalyticsResponseDto>> getAllAnalyticsRecordsByUserId(
+            @PathVariable(name = "user-id") String userId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        return ResponseEntity.ok(analyticsService.getAllAnalyticsRecordsByUserId(userId, page, size));
     }
 
 }
