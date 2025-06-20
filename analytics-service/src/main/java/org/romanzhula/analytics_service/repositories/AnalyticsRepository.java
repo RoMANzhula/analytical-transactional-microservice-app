@@ -60,4 +60,28 @@ public class AnalyticsRepository {
         ;
     }
 
+    public List<AnalyticsResponseDto> findAllByUserId(String userId, int page, int size) {
+        int offset = page * size;
+        String sql = """
+                SELECT id, user_id, event_type, event_time
+                FROM analytics_records
+                WHERE user_id = ?
+                ORDER BY event_time DESC
+                LIMIT ? OFFSET ?
+                """
+        ;
+
+        return jdbcTemplate.query(
+                sql,
+                new Object[]{userId, size, offset},
+                (rs, rowNum) -> AnalyticsResponseDto.builder()
+                        .id(rs.getString("id"))
+                        .userId(rs.getString("user_id"))
+                        .eventType(rs.getString("event_type"))
+                        .eventTime(rs.getTimestamp("event_time").toLocalDateTime())
+                        .build()
+                )
+        ;
+    }
+
 }
