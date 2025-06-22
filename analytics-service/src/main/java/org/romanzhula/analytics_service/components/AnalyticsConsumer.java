@@ -16,7 +16,7 @@ public class AnalyticsConsumer {
 
 
     @RabbitListener(
-            queues = "${spring.rabbitmq.queue.analytics",
+            queues = "${spring.rabbitmq.queue.analytics}",
             errorHandler = "rabbitErrorHandler"
     )
     public void handleAnalyticss(TransactionEventDto transactionEventDto) {
