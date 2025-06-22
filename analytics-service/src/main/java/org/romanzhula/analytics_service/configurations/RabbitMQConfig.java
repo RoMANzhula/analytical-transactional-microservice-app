@@ -1,14 +1,14 @@
 package org.romanzhula.analytics_service.configurations;
 
 import org.springframework.amqp.AmqpRejectAndDontRequeueException;
+import org.springframework.amqp.core.Binding;
+import org.springframework.amqp.core.BindingBuilder;
+import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.core.TopicExchange;
+import org.springframework.amqp.rabbit.listener.api.RabbitListenerErrorHandler;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.amqp.core.Queue;
-import org.springframework.amqp.core.Binding;
-import org.springframework.amqp.core.BindingBuilder;
-import org.springframework.amqp.core.TopicExchange;
-import org.springframework.util.ErrorHandler;
 
 
 @Configuration
@@ -44,9 +44,9 @@ public class RabbitMQConfig {
     }
 
     @Bean
-    public ErrorHandler rabbitErrorHandler() {
-        return t -> {
-            throw new AmqpRejectAndDontRequeueException("Error processing message", t);
+    public RabbitListenerErrorHandler rabbitErrorHandler() {
+        return (channel, amqpMessage, message, exception) -> {
+            throw new AmqpRejectAndDontRequeueException("Error processing message", exception);
         };
     }
 
