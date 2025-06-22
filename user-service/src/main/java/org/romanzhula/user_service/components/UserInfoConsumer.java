@@ -13,7 +13,7 @@ public class UserInfoConsumer {
 
     private final UserService userService;
 
-    @RabbitListener(queues = "${rabbitmq.queue.name.user-info}")
+    @RabbitListener(queues = "${spring.rabbitmq.queue.name.user-info}")
     public void consumeUserInfo(UserInfoMessage userInfoMessage) {
         userService.saveOrUpdateUser(userInfoMessage);
     }
