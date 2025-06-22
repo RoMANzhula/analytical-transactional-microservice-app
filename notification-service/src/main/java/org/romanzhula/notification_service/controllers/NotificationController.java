@@ -27,7 +27,7 @@ public class NotificationController {
         return ResponseEntity.ok(notificationsPage);
     }
 
-    @GetMapping("/user/{user-id")
+    @GetMapping("/user/{user-id}")
     public ResponseEntity<Page<NotificationResponse>> getNotificationsByUserId(
             @PathVariable(name = "user-id") String userId,
             @RequestParam(defaultValue = "0") int page,
