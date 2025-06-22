@@ -38,7 +38,7 @@ services:
     ports:
       - "8081:8081"
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/atma_user_db
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-user:5432/atma_user_db
       - SPRING_DATASOURCE_USERNAME=postgres
       - SPRING_DATASOURCE_PASSWORD=roman1985
       - SPRING_RABBITMQ_HOST=rabbitmq
@@ -60,7 +60,7 @@ services:
     ports:
       - "8082:8082"
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/atma_transaction_db
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-transaction:5432/atma_transaction_db
       - SPRING_DATASOURCE_USERNAME=postgres
       - SPRING_DATASOURCE_PASSWORD=roman1985
       - SPRING_RABBITMQ_HOST=rabbitmq
@@ -82,7 +82,7 @@ services:
     ports:
       - "8084:8084"
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/atma_notification_db
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-notification:5432/atma_notification_db
       - SPRING_DATASOURCE_USERNAME=postgres
       - SPRING_DATASOURCE_PASSWORD=roman1985
       - SPRING_RABBITMQ_HOST=rabbitmq
