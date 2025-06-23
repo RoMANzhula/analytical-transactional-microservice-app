@@ -3,7 +3,7 @@ spring:
     name: notification-service
 
   datasource:
-    url: jdbc:postgresql://postgres:5432/atma_notification_db
+    url: jdbc:postgresql://postgres-notification:5432/atma_notification_db
     username: postgres
     password: password
     driver-class-name: org.postgresql.Driver
