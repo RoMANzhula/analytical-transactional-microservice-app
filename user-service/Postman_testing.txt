@@ -52,3 +52,25 @@ Verify passphrase:
 
     We get JSON body and 200 OK:
         true
+
+
+Get userId by GoogleId:
+    GET     http://localhost:8081/api/v1/users/id/google
+
+    Headers:
+        key: X-Google-Id
+        value: 1121005748781025xxxxx
+
+    We get JSON body:
+        1
+
+
+Get userId by GitHubId:
+    GET     http://localhost:8081/api/v1/users/id/github
+
+    Headers:
+            key: X-Github-Id
+            value: 1134xxxxx
+
+    We get JSON body:
+        2               - because our user has different emails in Google and Github
