@@ -39,3 +39,16 @@ Install passphrase for user:
         Passphrase set successfully!
 
     In DB we see passphrase as: "$2a$10$G3mTIUCaTPDHnMsy96PYWuOFe/0xqq3hhLoY9xWGmnQAIhZoH8Gb6"
+
+
+Verify passphrase:
+    POST    http://localhost:8081/api/v1/users/verify-passphrase
+
+    Body -> raw -> JSON:
+        {
+            "userId": 1,
+            "passphrase": "mysecretpass"
+        }
+
+    We get JSON body and 200 OK:
+        true
