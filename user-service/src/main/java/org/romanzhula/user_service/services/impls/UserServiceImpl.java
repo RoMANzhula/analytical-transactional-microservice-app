@@ -64,6 +64,7 @@ public class UserServiceImpl implements UserService {
                     .email(userInfoMessage.email())
                     .googleId(userInfoMessage.googleId())
                     .githubId(userInfoMessage.githubId())
+                    .passphraseHash("temporary")
                     .build();
         } else {
             // If user exists - update it data
@@ -81,7 +82,7 @@ public class UserServiceImpl implements UserService {
             }
         }
 
-        userRepository.save(user);
+        userRepository.saveAndFlush(user);
     }
 
     @Override
