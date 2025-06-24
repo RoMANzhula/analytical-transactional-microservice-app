@@ -25,3 +25,17 @@ Get data about user by ID:
         }
 
 
+Install passphrase for user:
+    POST    http://localhost:8081/api/v1/users/set-passphrase
+
+    Body -> raw -> JSON
+        {
+            "googleId": "1121005748781025xxxxx",
+            "githubId": null,
+            "passphrase": "mysecretpass"
+        }
+
+    We get raw body and status 200 OK:
+        Passphrase set successfully!
+
+    In DB we see passphrase as: "$2a$10$G3mTIUCaTPDHnMsy96PYWuOFe/0xqq3hhLoY9xWGmnQAIhZoH8Gb6"
