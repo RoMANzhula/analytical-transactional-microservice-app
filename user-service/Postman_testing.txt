@@ -1,0 +1,17 @@
+
+Create new user:
+    POST    http://localhost:8081/api/v1/users/create
+
+    Body -> Raw -> JSON
+        {
+            "name": "Test User",
+            "email": "testuser@example.com"
+        }
+
+    We get JSON body and status 200 OK:
+        {
+            "name": "Test User",
+            "email": "testuser@example.com"
+        }
+
+
