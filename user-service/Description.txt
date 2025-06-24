@@ -1,0 +1,30 @@
+
+This service add new user via OAuth2 Google and Github through email.
+If email in Google and GitHub is different - service create two users.
+
+For create table in DB:
+    go to pgAdmin -> create new service:
+        host = localhost
+        port = 5433
+
+    create new table (here we need use migrations(flyway or liquibase) for useful logic):
+        CREATE TABLE users (
+            user_id BIGSERIAL PRIMARY KEY,
+            name VARCHAR(255),
+            email VARCHAR(255) UNIQUE,
+            google_id VARCHAR(255) UNIQUE,
+            github_id VARCHAR(255) UNIQUE,
+            created_at TIMESTAMP NOT NULL,
+            passphrase_hash VARCHAR(255) NOT NULL
+        );
+
+Run build-and-up.sh
+    chmod +x build-and-up.sh
+    ./build-and-up.sh
+
+Go to browser:
+    localhost:8080/login
+
+    check auth (Google or GitHub)
+    after us redirect to http://localhost:3000/set-passphrase?googleId=1121005748xxxxxxx93502&githubId for create
+        passphrase on client side
