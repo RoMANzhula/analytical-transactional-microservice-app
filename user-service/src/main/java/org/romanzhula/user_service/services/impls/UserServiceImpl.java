@@ -42,6 +42,7 @@ public class UserServiceImpl implements UserService {
         User savedUser = User.builder()
                 .name(userRequest.getName())
                 .email(userRequest.getEmail())
+                .passphraseHash("temporary")
                 .build()
         ;
 
