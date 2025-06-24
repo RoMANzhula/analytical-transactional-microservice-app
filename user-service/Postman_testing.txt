@@ -15,3 +15,13 @@ Create new user:
         }
 
 
+Get data about user by ID:
+    GET     http://localhost:8081/api/v1/users/1
+
+    We get JSON body and status 200 OK:
+        {
+            "name": "Roman Manzhula",
+            "email": "roman1985aleks@gmail.com"
+        }
+
+
