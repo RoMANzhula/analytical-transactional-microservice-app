@@ -1,0 +1,25 @@
+
+Create new transaction:
+    POST     http://localhost:8082/api/v1/transactions
+
+    Headers:
+        Content-Type: application/json
+
+    Body -> raw -> JSON:
+        {
+          "amount": 150.00,
+          "currency": "USD",
+          "passphrase": "secret123",
+          "googleId": "1121005748781025xxxxx"
+        }
+
+    We get JSON Body and 200 Ok:
+        {
+            "id": 3,
+            "userId": "1",
+            "amount": 150.00,
+            "currency": "USD",
+            "createdAt": "2025-06-25T20:43:27.294417727",
+            "googleId": "1121005748781025xxxxx",
+            "githubId": null
+        }
