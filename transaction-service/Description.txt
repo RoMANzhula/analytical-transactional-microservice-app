@@ -1,0 +1,16 @@
+
+For create table in DB:
+    go to pgAdmin -> create new service:
+        host = localhost
+        port = 5434
+
+    create new table (here we need use migrations(flyway or liquibase) for useful logic):
+        CREATE TABLE transactions (
+            id SERIAL PRIMARY KEY,
+            user_id BIGINT NOT NULL,
+            amount NUMERIC(19, 4) NOT NULL,
+            currency VARCHAR(255) NOT NULL,
+            created_at TIMESTAMP NOT NULL,
+            google_id VARCHAR(255),
+            github_id VARCHAR(255)
+        );
