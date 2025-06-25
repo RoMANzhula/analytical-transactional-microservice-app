@@ -1,10 +1,9 @@
 package org.romanzhula.transaction_service.configurations;
 
 import lombok.RequiredArgsConstructor;
+import org.romanzhula.transaction_service.dto.VerifyPassphraseRequestDto;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
-
-import java.util.Map;
 
 
 @Service
@@ -15,16 +14,26 @@ public class UserServiceClient {
 
 
     public boolean verifyPassphrase(String googleId, String githubId, String passphrase) {
-        return webClient.post()
-                .uri("/users/verify-passphrase")
-                .bodyValue(Map.of(
-                        "googleId", googleId,
-                        "githubId", githubId,
-                        "passphrase", passphrase
-                ))
+        Long userId = null;
+
+        if (googleId != null) {
+            userId = getUserIdByGoogleId(googleId);
+        } else if (githubId != null) {
+            userId = getUserIdByGithubId(githubId);
+        }
+
+        if (userId == null) {
+            throw new IllegalArgumentException("User ID not found via Google or GitHub ID");
+        }
+
+        VerifyPassphraseRequestDto requestDto = new VerifyPassphraseRequestDto(userId, passphrase);
+
+        return Boolean.TRUE.equals(webClient.post()
+                .uri("/api/v1/users/verify-passphrase")
+                .bodyValue(requestDto)
                 .retrieve()
                 .bodyToMono(Boolean.class)
-                .block()
+                .block())
         ;
     }
 
