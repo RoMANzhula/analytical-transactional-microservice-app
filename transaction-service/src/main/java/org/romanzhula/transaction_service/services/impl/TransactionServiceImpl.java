@@ -71,6 +71,8 @@ public class TransactionServiceImpl implements TransactionService {
                 .userId(userId)
                 .amount(request.getAmount())
                 .currency(request.getCurrency())
+                .googleId(googleId)
+                .githubId(githubId)
                 .build()
         ;
 
@@ -115,6 +117,8 @@ public class TransactionServiceImpl implements TransactionService {
                         .userId(transaction.getUserId().toString())
                         .amount(transaction.getAmount())
                         .currency(transaction.getCurrency())
+                        .googleId(googleId)
+                        .githubId(githubId)
                         .createdAt(transaction.getCreatedAt())
                         .build()
         );
