@@ -138,6 +138,14 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
 
+    @Override
+    public Page<TransactionResponse> getTransactionsByGoogleId(String googleId, Pageable pageable) {
+        return transactionRepository.findByGoogleId(googleId, pageable)
+                .map(transaction -> modelMapper.map(transaction, TransactionResponse.class))
+        ;
+    }
+
+
     private Long getUserIdFromUserService(String googleId, String githubId) {
         try {
             if (googleId != null) {

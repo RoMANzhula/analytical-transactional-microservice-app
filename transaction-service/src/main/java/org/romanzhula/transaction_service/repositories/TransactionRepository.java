@@ -13,4 +13,6 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
 
     Page<Transaction> findByUserId(Long userId, Pageable pageable);
 
+    Page<Transaction> findByGoogleId(String googleId, Pageable pageable);
+
 }
