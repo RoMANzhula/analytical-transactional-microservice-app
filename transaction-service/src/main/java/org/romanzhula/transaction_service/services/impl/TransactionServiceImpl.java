@@ -2,6 +2,7 @@ package org.romanzhula.transaction_service.services.impl;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.romanzhula.transaction_service.configurations.UserServiceClient;
 import org.romanzhula.transaction_service.dto.TransactionRequest;
 import org.romanzhula.transaction_service.dto.TransactionResponse;
@@ -12,6 +13,8 @@ import org.romanzhula.transaction_service.repositories.TransactionRepository;
 import org.romanzhula.transaction_service.services.TransactionService;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,6 +43,7 @@ public class TransactionServiceImpl implements TransactionService {
     private final UserServiceClient userServiceClient;
     private final TransactionRepository transactionRepository;
     private final RabbitTemplate rabbitTemplate;
+    private final ModelMapper modelMapper;
 
     // Virtual Threads Executor for rabbitmq messages
     private final ExecutorService executorService = Executors.newVirtualThreadPerTaskExecutor();
@@ -123,6 +127,16 @@ public class TransactionServiceImpl implements TransactionService {
                         .build()
         );
     }
+
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<TransactionResponse> getTransactionsByUserId(Long userId, Pageable pageable) {
+        return transactionRepository.findByUserId(userId, pageable)
+                .map(transaction -> modelMapper.map(transaction, TransactionResponse.class))
+        ;
+    }
+
 
     private Long getUserIdFromUserService(String googleId, String githubId) {
         try {
