@@ -36,6 +36,7 @@
 		<spring-cloud.version>2025.0.0</spring-cloud.version>
 		<lombok.version>1.18.34</lombok.version>
 		<validator.version>8.0.2.Final</validator.version>
+		<model-mapper.version>3.2.3</model-mapper.version>
 	</properties>
 
 	<dependencies>
@@ -97,6 +98,13 @@
 			<groupId>org.hibernate.validator</groupId>
 			<artifactId>hibernate-validator</artifactId>
 			<version>${validator.version}</version>
+		</dependency>
+
+		<!-- Auto-model-mapper-->
+		<dependency>
+			<groupId>org.modelmapper</groupId>
+			<artifactId>modelmapper</artifactId>
+			<version>${model-mapper.version}</version>
 		</dependency>
 
 
