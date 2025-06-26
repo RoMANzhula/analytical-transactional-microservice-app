@@ -5,11 +5,10 @@ import lombok.RequiredArgsConstructor;
 import org.romanzhula.transaction_service.dto.TransactionRequest;
 import org.romanzhula.transaction_service.dto.TransactionResponse;
 import org.romanzhula.transaction_service.services.TransactionService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 
 @RestController
@@ -19,11 +18,21 @@ public class TransactionController {
 
     private final TransactionService transactionService;
 
+
     @PostMapping
     public ResponseEntity<TransactionResponse> createTransaction(
             @RequestBody TransactionRequest request
     ) {
         return transactionService.createTransaction(request);
+    }
+
+    @GetMapping("/by-user-id")
+    public Page<TransactionResponse> getByUserId(
+            @RequestParam Long userId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        return transactionService.getTransactionsByUserId(userId, PageRequest.of(page, size));
     }
 
 }
