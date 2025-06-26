@@ -35,4 +35,13 @@ public class TransactionController {
         return transactionService.getTransactionsByUserId(userId, PageRequest.of(page, size));
     }
 
+    @GetMapping("/by-google-id")
+    public Page<TransactionResponse> getByGoogleId(
+            @RequestParam String googleId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        return transactionService.getTransactionsByGoogleId(googleId, PageRequest.of(page, size));
+    }
+
 }
