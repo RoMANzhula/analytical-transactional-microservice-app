@@ -15,4 +15,6 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
 
     Page<Transaction> findByGoogleId(String googleId, Pageable pageable);
 
+    Page<Transaction> findByGithubId(String githubId, Pageable pageable);
+
 }

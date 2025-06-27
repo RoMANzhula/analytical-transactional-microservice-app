@@ -139,8 +139,18 @@ public class TransactionServiceImpl implements TransactionService {
 
 
     @Override
+    @Transactional(readOnly = true)
     public Page<TransactionResponse> getTransactionsByGoogleId(String googleId, Pageable pageable) {
         return transactionRepository.findByGoogleId(googleId, pageable)
+                .map(transaction -> modelMapper.map(transaction, TransactionResponse.class))
+        ;
+    }
+
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<TransactionResponse> getTransactionsByGithubId(String githubId, Pageable pageable) {
+        return transactionRepository.findByGithubId(githubId, pageable)
                 .map(transaction -> modelMapper.map(transaction, TransactionResponse.class))
         ;
     }
