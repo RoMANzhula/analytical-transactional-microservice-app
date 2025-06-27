@@ -44,4 +44,13 @@ public class TransactionController {
         return transactionService.getTransactionsByGoogleId(googleId, PageRequest.of(page, size));
     }
 
+    @GetMapping("/by-github-id")
+    public Page<TransactionResponse> getByGithubId(
+            @RequestParam String githubId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        return transactionService.getTransactionsByGithubId(githubId, PageRequest.of(page, size));
+    }
+
 }
