@@ -90,3 +90,62 @@ Get all transactions by user ID:
             "numberOfElements": 3,
             "empty": false
         }
+
+
+Get all transactions by Google ID:
+    GET     http://localhost:8082/api/v1/transactions/by-google-id?googleId=112100574878102593502&page=0&size=5
+
+    Params:
+        value:       key:
+        googleId        1
+        page            0
+        size            5
+
+    We GET json BODY and 200 Ok:
+        {
+            "content": [
+                {
+                    "id": 2,
+                    "userId": "1",
+                    "amount": 150.00,
+                    "currency": "USD",
+                    "createdAt": "2025-06-25T20:37:09.08723",
+                    "googleId": "112100574878102593502",
+                    "githubId": null
+                },
+                {
+                    "id": 3,
+                    "userId": "1",
+                    "amount": 150.00,
+                    "currency": "USD",
+                    "createdAt": "2025-06-25T20:43:27.294418",
+                    "googleId": "112100574878102593502",
+                    "githubId": null
+                }
+            ],
+            "pageable": {
+                "pageNumber": 0,
+                "pageSize": 5,
+                "sort": {
+                    "sorted": false,
+                    "empty": true,
+                    "unsorted": true
+                },
+                "offset": 0,
+                "paged": true,
+                "unpaged": false
+            },
+            "last": true,
+            "totalPages": 1,
+            "totalElements": 2,
+            "size": 5,
+            "number": 0,
+            "sort": {
+                "sorted": false,
+                "empty": true,
+                "unsorted": true
+            },
+            "first": true,
+            "numberOfElements": 2,
+            "empty": false
+        }
