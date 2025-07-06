@@ -1,0 +1,56 @@
+Get all notifications:
+    GET     http://localhost:8084/api/v1/notifications/all?page=0&size=5
+
+    Params:
+        Key:          Value:
+        page            0
+        size            5
+
+    We get JSON Body and 200 OK:
+        {
+            "content": [
+                {
+                    "id": 1,
+                    "userId": "1",
+                    "message": "Your transaction amount is: 150.00 USD done successfully!",
+                    "createdAt": "2025-06-25T20:27:31.720806"
+                },
+                {
+                    "id": 2,
+                    "userId": "1",
+                    "message": "Your transaction amount is: 150.00 USD done successfully!",
+                    "createdAt": "2025-06-25T20:37:10.329129"
+                },
+                {
+                    "id": 3,
+                    "userId": "1",
+                    "message": "Your transaction amount is: 150.00 USD done successfully!",
+                    "createdAt": "2025-06-25T20:43:28.279834"
+                }
+            ],
+            "pageable": {
+                "pageNumber": 0,
+                "pageSize": 5,
+                "sort": {
+                    "sorted": false,
+                    "empty": true,
+                    "unsorted": true
+                },
+                "offset": 0,
+                "paged": true,
+                "unpaged": false
+            },
+            "totalElements": 3,
+            "totalPages": 1,
+            "last": true,
+            "size": 5,
+            "number": 0,
+            "sort": {
+                "sorted": false,
+                "empty": true,
+                "unsorted": true
+            },
+            "numberOfElements": 3,
+            "first": true,
+            "empty": false
+        }
